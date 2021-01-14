@@ -1,6 +1,8 @@
 
 from django.views.generic import ListView
-from django.shortcuts import render
+from django.http import Http404
+from django.urls import reverse
+from django.shortcuts import render, redirect
 from . import models
 
 
@@ -13,6 +15,11 @@ class HomeView(ListView):
     context_object_name = "rooms"
 
     def room_detail(request, pk):
-        return render(request, "rooms/detail.html")    
+        try:
+            room = models.Room.objects.get(pk=pk)
+        except models.Room.DoesNotExist:
+            raise Http404() # error는 raise 키워드 사용
+        
+        return render(request, "rooms/detail.html", {"room": room})    
 
 
