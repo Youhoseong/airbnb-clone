@@ -31,7 +31,7 @@ class RoomAdmin(admin.ModelAdmin):
         (
             "Basic Info",
             {"fields": ("name", "description",
-                        "country", "city", "address", "price")}
+                        "country", "city", "address", "price", "room_type")}
         ),
         (
             "Times",
@@ -60,6 +60,7 @@ class RoomAdmin(admin.ModelAdmin):
         "country",
         "city",
         "price",
+        "room_type",
         "guests",
         "beds",
         "bedrooms",
