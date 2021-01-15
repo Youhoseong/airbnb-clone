@@ -86,6 +86,7 @@ class Room(core_models.TimeStampedModel):
     house_rules = models.ManyToManyField(
         "HouseRule", related_name="rooms", blank=True)
 
+
     def save(self, *args, **kwargs): # 저장되는 정보 intercept
         self.city = str.capitalize(self.city)
         super().save(*args, **kwargs)
