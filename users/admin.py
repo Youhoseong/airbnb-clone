@@ -17,7 +17,7 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = UserAdmin.fieldsets + \
         (("Custom Profile", {"fields": ("avatar", "gender", "bio",
-                                        "birthdate", "language", "currency", "superhost")}),)
+                                        "birthdate", "language", "currency", "superhost", "login_method")}),)
 
     list_filter = UserAdmin.list_filter + (
         "superhost",
@@ -35,5 +35,6 @@ class CustomUserAdmin(UserAdmin):
         "is_staff",
         "is_superuser",
         "email_verified",
-        "email_secret"
+        "email_secret",
+        "login_method"
     )
