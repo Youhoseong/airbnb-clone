@@ -4,6 +4,9 @@
        
         {% if user.is_authenticated %}
             <li>
+                {{user.email}}
+            </li>
+            <li>
                 <a href="{% url "users:logout" %}">Logout</a>
             </li>
 
