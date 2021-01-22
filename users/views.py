@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from . import forms, models
 import os
 import requests
+from django.core.files.base import ContentFile
 
 class LoginView(FormView):
 
@@ -175,13 +176,13 @@ def kakao_callback(request):
             headers={"Authorization": f"Bearer {access_token}"},
         )
         profile_json = profile_request.json()
-        email = profile_json.get("kakao_account",None).get("email", None)
+        email = profile_json.get("kakao_account", None).get("email", None)
         if email is None:
             raise KakaoException()
 
-        properties = profile_json.get("properties")
+        properties = profile_json.get("kakao_account").get("profile", None)
         nickname = properties.get("nickname")
-        profile_image = properties.get("profile_image")
+        profile_image = properties.get("profile_image_url")
         
         try:
             user = models.User.objects.get(email=email)
@@ -200,6 +201,10 @@ def kakao_callback(request):
             )
             user.set_unusable_password()
             user.save()
+
+            if profile_image is not None:
+                photo_request = requests.get(profile_image)
+                user.avatar.save(f"{nickname}-avatar", ContentFile(photo_request.content))
 
         login(request, user)
         return redirect(reverse("core:home"))
