@@ -1,21 +1,22 @@
 {% load static %}
 
-    <ul class="flex items-center text-sm font-medium">
+    <ul class="flex items-center text-sm font-medium h-full">
        
         {% if user.is_authenticated %}
-            <li class="ml-8">
+            <li class="nav_link">
+                
                 {{user.email}}
             </li>
-            <li class="ml-8">
+            <li class="nav_link">
                 <a href="{% url "users:logout" %}">Logout</a>
             </li>
 
         {% else %}
-            <li class="ml-8">
+            <li class="nav_link">
                 <a href="{% url "users:login" %}">Login</a>
             </li>
 
-            <li class="ml-8">
+            <li class="nav_link">
                 <a href="{% url "users:signup" %}">Sign up</a>
             </li>
 

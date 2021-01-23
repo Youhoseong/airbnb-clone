@@ -4,9 +4,6 @@
     Sign up
 {% endblock page_title %}
 
-{% block search-bar %}
-{% endblock search-bar %}
-
 {% block content %}
     {% include 'partials/social_login.html' %}
     <form method="POST" action="{% url "users:signup" %}">
