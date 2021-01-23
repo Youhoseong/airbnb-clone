@@ -7,6 +7,7 @@ from . import forms, models
 import os
 import requests
 from django.core.files.base import ContentFile
+from  django.contrib.auth.forms import UserCreationForm
 
 class LoginView(FormView):
 

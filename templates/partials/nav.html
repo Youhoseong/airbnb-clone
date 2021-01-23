@@ -1,21 +1,21 @@
+{% load static %}
 
-    <a href="{% url "core:home" %}">Nbnb</a>
-    <ul>
+    <ul class="flex items-center text-sm font-medium">
        
         {% if user.is_authenticated %}
-            <li>
+            <li class="ml-8">
                 {{user.email}}
             </li>
-            <li>
+            <li class="ml-8">
                 <a href="{% url "users:logout" %}">Logout</a>
             </li>
 
         {% else %}
-            <li>
+            <li class="ml-8">
                 <a href="{% url "users:login" %}">Login</a>
             </li>
 
-            <li>
+            <li class="ml-8">
                 <a href="{% url "users:signup" %}">Sign up</a>
             </li>
 
