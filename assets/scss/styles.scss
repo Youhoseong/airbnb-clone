@@ -1,12 +1,12 @@
 @tailwind base;
-
 @tailwind components;
-
-
-
 
 .search-box {
     transition: box-shadow 0.2s linear;
+}
+
+.btn_link {
+    @apply text-center rounded-sm py-5 font-light text-lg w-full;
 }
 
 .nav_link{
@@ -14,10 +14,13 @@
     a {
         @apply py-10 px-5;
     }
+
     &:hover {
         @apply border-gray-600;
     }
 }
+
+
 
 @tailwind utilities;
 
