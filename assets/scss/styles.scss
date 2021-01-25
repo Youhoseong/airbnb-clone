@@ -5,7 +5,7 @@
     transition: box-shadow 0.2s linear;
 }
 
-.btn_link {
+.btn{
     @apply text-center rounded-sm py-5 font-light text-lg w-full;
 }
 
@@ -20,7 +20,28 @@
     }
 }
 
+input {
+        @apply rounded-sm py-5 font-light text-lg w-full text-left border border-gray-600 px-5;
+        &:focus {
+            @apply outline-none border-red-400;
+        }
+    
+}
 
+form {
+    .input {
+        @apply mb-3 w-full;
+        &.has_error {
+            input {
+                @apply bg-red-200 border-gray-600;
+                &:focus {
+                    @apply border-gray-600;
+                }
+            }
+        }
+    }
+    
+}
 
 @tailwind utilities;
 
