@@ -1,4 +1,4 @@
-# Airbnb Clone :heart_eyes:
+# Airbnb Clone
 
 Cloning Airbnb with Python, Django, Tailwind and more... 
 
