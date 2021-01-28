@@ -68,7 +68,7 @@ class User(AbstractUser):
     email_secret = models.CharField(max_length=20, default="", blank=True)
     login_method = models.CharField(max_length=50, choices=LOGIN_CHOICES, default=LOGIN_EMAIL)
 
-    def get_absoulte_url(self):
+    def get_absolute_url(self):
         return reverse("users:profile", kwargs={"pk": self.pk})
 
     def verify_email(self):
@@ -90,5 +90,4 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
- #   def get_absolute_url(self):
- #       return reverse("rooms:detail", kwargs={'pk':self.pk})
+
