@@ -4,14 +4,15 @@ from django.views import View
 from django.views.generic import FormView, DetailView, UpdateView
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth import authenticate, login, logout
-from . import forms, models
+from . import forms, models, mixins
 import os
 import requests
 from django.core.files.base import ContentFile
 from  django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 
-class LoginView(FormView):
+class LoginView(mixins.LoggedOutOnlyView, FormView):
 
     template_name = "users/login.html"
     form_class = forms.LoginForm
@@ -29,14 +30,7 @@ class LoginView(FormView):
         if user is not None:
             login(self.request, user)
 
-        return super().form_valid(form)     
-
-"""     def post(self, request):
-        form = forms.LoginForm(request.POST)
-        if form.is_valid():
-           
-
-        return render(request, "users/login.html", {"form": form}) """
+        return super().form_valid(form) 
 
 def log_out(request):
     messages.info(request, f"See you later {request.user.first_name}")
@@ -228,7 +222,7 @@ class UserProfileView(DetailView):
         context["hello"] = "Hello!"
         return context
 
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(SuccessMessageMixin, UpdateView):
     model = models.User
     template_name = "users/update-profile.html"
     fields = (
@@ -241,6 +235,8 @@ class UpdateProfileView(UpdateView):
         "language",
         "currency",
     )
+    success_message = "Profile Updated"
+
     def get_object(self, queryset=None):
         return self.request.user
     
@@ -251,8 +247,9 @@ class UpdateProfileView(UpdateView):
         return form
 
 
-class UpdatePassword(PasswordChangeView):
+class UpdatePassword(SuccessMessageMixin, PasswordChangeView):
     template_name = "users/update-password.html"
+    success_message = "Password Updated"
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
@@ -260,3 +257,8 @@ class UpdatePassword(PasswordChangeView):
         form.fields["new_password1"].widget.attrs = {'placeholder': "New Password"}
         form.fields["new_password2"].widget.attrs = {'placeholder': "Confirm new Password"}
         return form
+
+    def get_success_url(self):
+        return self.request.user.get_absolute_url()
+    
+    
