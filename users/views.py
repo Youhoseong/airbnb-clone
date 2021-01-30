@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import FormView, DetailView, UpdateView
+from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth import authenticate, login, logout
 from . import forms, models
 import os
@@ -231,9 +232,9 @@ class UpdateProfileView(UpdateView):
     model = models.User
     template_name = "users/update-profile.html"
     fields = (
+        "email",
         "first_name",
         "last_name",
-        "avatar",
         "gender",
         "bio",
         "birthdate",
@@ -242,3 +243,20 @@ class UpdateProfileView(UpdateView):
     )
     def get_object(self, queryset=None):
         return self.request.user
+    
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["birthdate"].widget.attrs = {'placeholder': "Birthdate"}
+        form.fields["first_name"].widget.attrs = {'placeholder': "First name"}
+        return form
+
+
+class UpdatePassword(PasswordChangeView):
+    template_name = "users/update-password.html"
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["old_password"].widget.attrs = {'placeholder': "Current Password"}
+        form.fields["new_password1"].widget.attrs = {'placeholder': "New Password"}
+        form.fields["new_password2"].widget.attrs = {'placeholder': "Confirm new Password"}
+        return form
