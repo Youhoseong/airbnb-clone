@@ -12,14 +12,12 @@ from  django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 
+
+
 class LoginView(mixins.LoggedOutOnlyView, FormView):
 
     template_name = "users/login.html"
     form_class = forms.LoginForm
-    success_url = reverse_lazy("core:home")
-    initial = {
-        "email": "h0song@naver.com"
-    }
 
     def form_valid(self, form):
 
@@ -32,12 +30,19 @@ class LoginView(mixins.LoggedOutOnlyView, FormView):
 
         return super().form_valid(form) 
 
+    def get_success_url(self):
+        next_arg = self.request.GET.get("next")
+        if next_arg is not None:
+            return next_arg
+        else:
+            return reverse("core:home")
+
 def log_out(request):
     messages.info(request, f"See you later {request.user.first_name}")
     logout(request)
     return redirect(reverse("core:home"))
 
-class SignUpView(FormView):
+class SignUpView(mixins.LoggedOutOnlyView, FormView):
     template_name = "users/signup.html"
     form_class = forms.SignUpForm
     success_url = reverse_lazy("core:home")
@@ -222,7 +227,7 @@ class UserProfileView(DetailView):
         context["hello"] = "Hello!"
         return context
 
-class UpdateProfileView(SuccessMessageMixin, UpdateView):
+class UpdateProfileView(mixins.LoggedInOnlyView,SuccessMessageMixin, UpdateView):
     model = models.User
     template_name = "users/update-profile.html"
     fields = (
@@ -247,7 +252,7 @@ class UpdateProfileView(SuccessMessageMixin, UpdateView):
         return form
 
 
-class UpdatePassword(SuccessMessageMixin, PasswordChangeView):
+class UpdatePassword(mixins.EmailLoginOnlyView, mixins.LoggedInOnlyView, SuccessMessageMixin, PasswordChangeView):
     template_name = "users/update-password.html"
     success_message = "Password Updated"
 
