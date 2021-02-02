@@ -19,11 +19,16 @@
                 </div>
 
                 <div class="flex flex-col w-1/5">
-                    <a class="btn-link mb-5 bg-gray-400" href="#">Edit</a>
-                    <a class="btn-link" href="#">Delete</a>
+                    <a class="btn-link mb-5 bg-gray-400" href="{% url 'rooms:edit-photo' room.pk photo.pk %}">Edit</a>
+                    <a class="btn-link" href="{% url 'rooms:delete-photo' room.pk photo.pk %}">Delete</a>
                 </div>
             </div>
         {% endfor %}
+
+        <div class="flex justify-center mt-5">
+            <a href="{{room.get_absolute_url}}/edit" class="text-red-400 font-medium font-xl">Back to Edit Room</a>
+        </div>
+        
         
     </div>
 {% endblock content %} 
