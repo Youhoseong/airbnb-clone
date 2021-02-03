@@ -1,5 +1,5 @@
 
-from django.views.generic import ListView, DetailView, View, UpdateView
+from django.views.generic import ListView, DetailView, View, UpdateView, CreateView, FormView
 from django.http import Http404
 from django.urls import reverse
 from django.shortcuts import render, redirect
@@ -50,7 +50,7 @@ class SearchView(View):
                 filter_args = {}
 
                 if city != "Anywhere":
-                    filter_args["city__startwith"] = city
+                    filter_args["city__startswith"] = city
 
                 filter_args["country"] = country
 
@@ -171,6 +171,33 @@ class EditPhotoView(user_mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateVie
         room_pk = self.kwargs.get("room_pk")
         return reverse("rooms:photos", kwargs={'pk': room_pk})
 
+
+class AddPhotoView(user_mixins.LoggedInOnlyView, FormView):
+    # form에 모델이 있음
+    template_name = "rooms/photo_create.html"
+    # form에 필드가 있음
+    form_class = forms.CreatePhotoForm
+
+    # form_valid를 쓰면 success message mixin을 쓸 수 없다고 함.
+
+    def form_valid(self, form):
+        pk = self.kwargs.get('pk')
+        form.save(pk)
+        messages.success(self.request, "photo Uploaded")
+        return redirect(reverse("rooms:photos", kwargs={'pk': pk}))
+
+
+class CreateRoomView(user_mixins.LoggedInOnlyView, FormView):
+    form_class = forms.CreateRoomForm
+    template_name = "rooms/room_create.html"
+
+    def form_valid(self, form):
+        room = form.save()
+        room.host= self.request.user
+        room.save()
+        form.save_m2m()
+        messages.success(self.request, "Room Created")
+        return redirect(reverse("rooms:detail", kwargs={'pk': room.pk}))
 
  
 
