@@ -17,11 +17,14 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from . import views
 
+
+app_name = "reservations"
 urlpatterns = [
-    path('admin/', admin.site.urls),
+   path("create/<int:room>/<int:year>-<int:month>-<int:day>/", views.create, name="create"),
+   path("<int:pk>/", views.ReservationDetailView.as_view(), name="detail"),
+   path("<int:pk>/<str:verb>", views.edit_reservation, name="edit")
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+
